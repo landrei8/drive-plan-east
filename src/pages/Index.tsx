@@ -1,22 +1,15 @@
 import { AppLayout } from "@/components/AppLayout";
-import { MapPin, Zap, Fuel, Navigation } from "lucide-react";
+import { Zap, Fuel, Navigation } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import Map from "@/components/Map";
 
 const MapPage = () => {
   return (
     <AppLayout>
-      <div className="relative h-[calc(100vh-var(--bottom-nav-height))]">
-        {/* Map placeholder */}
-        <div className="absolute inset-0 bg-surface flex items-center justify-center">
-          <div className="text-center space-y-4 p-6">
-            <div className="mx-auto w-20 h-20 rounded-2xl bg-primary/10 flex items-center justify-center glow-primary">
-              <MapPin className="h-10 w-10 text-primary" />
-            </div>
-            <h2 className="text-xl font-display font-semibold text-foreground">Interactive Map</h2>
-            <p className="text-sm text-muted-foreground max-w-xs">
-              Gas stations & EV chargers across Romania, Moldova, and Bulgaria
-            </p>
-          </div>
+      <div className="relative flex-1 min-h-[calc(100vh-var(--bottom-nav-height)-env(safe-area-inset-bottom,0px))]">
+        {/* Map area */}
+        <div className="absolute inset-0">
+          <Map />
         </div>
 
         {/* Floating filter chips */}
@@ -33,7 +26,10 @@ const MapPage = () => {
 
         {/* Floating locate button */}
         <div className="absolute bottom-6 right-4 z-10">
-          <Button size="icon" className="h-12 w-12 rounded-full shadow-lg glow-primary">
+          <Button 
+            size="icon" 
+            className="h-12 w-12 rounded-full shadow-lg glow-primary"
+          >
             <Navigation className="h-5 w-5" />
           </Button>
         </div>
