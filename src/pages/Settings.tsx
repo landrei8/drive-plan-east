@@ -1,32 +1,44 @@
+import { useState } from "react";
 import { AppLayout } from "@/components/AppLayout";
-import { ArrowLeft, Trash2, Bug, ChevronRight } from "lucide-react";
+import { ArrowLeft, Trash2, Bug, ChevronRight, Loader2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 
 const SettingsPage = () => {
   const navigate = useNavigate();
+  const [clearing, setClearing] = useState(false);
 
   const clearCache = async () => {
     try {
+      setClearing(true);
+      toast.loading("Clearing data...", { id: "clear-cache" });
+      
       // Clear caches
       if ('caches' in window) {
         const cacheNames = await caches.keys();
         await Promise.all(cacheNames.map(name => caches.delete(name)));
       }
+      
+      // Give it a tiny bit of time for effect and reliability
+      await new Promise(resolve => setTimeout(resolve, 800));
+
       // Clear localStorage
       localStorage.clear();
       // Clear sessionStorage
       sessionStorage.clear();
+      
       // Unregister service workers
       if ('serviceWorker' in navigator) {
         const registrations = await navigator.serviceWorker.getRegistrations();
         await Promise.all(registrations.map(r => r.unregister()));
       }
-      toast.success("Cache & data cleared successfully");
+      
+      toast.success("Cache & data cleared successfully", { id: "clear-cache" });
       setTimeout(() => window.location.reload(), 1000);
     } catch (err) {
-      toast.error("Failed to clear cache");
+      setClearing(false);
+      toast.error("Failed to clear cache", { id: "clear-cache" });
     }
   };
 
@@ -43,14 +55,21 @@ const SettingsPage = () => {
         <div className="space-y-3">
           {/* Clear cache */}
           <button
+            disabled={clearing}
             onClick={clearCache}
-            className="w-full glass rounded-xl p-4 flex items-center gap-4 text-left hover:bg-surface-hover transition-colors"
+            className="w-full glass rounded-xl p-4 flex items-center gap-4 text-left hover:bg-surface-hover transition-colors disabled:opacity-70"
           >
             <div className="p-2 rounded-lg bg-destructive/10">
-              <Trash2 className="h-5 w-5 text-destructive" />
+              {clearing ? (
+                <Loader2 className="h-5 w-5 text-destructive animate-spin" />
+              ) : (
+                <Trash2 className="h-5 w-5 text-destructive" />
+              )}
             </div>
             <div className="flex-1">
-              <p className="text-sm font-medium text-foreground">Clear Cache & Data</p>
+              <p className="text-sm font-medium text-foreground">
+                {clearing ? "Clearing..." : "Clear Cache & Data"}
+              </p>
               <p className="text-xs text-muted-foreground">Force refresh all app data</p>
             </div>
           </button>

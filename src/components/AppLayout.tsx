@@ -1,5 +1,6 @@
 import { ReactNode } from "react";
 import { BottomNav } from "./BottomNav";
+import { cn } from "@/lib/utils";
 
 interface AppLayoutProps {
   children: ReactNode;
@@ -9,8 +10,8 @@ interface AppLayoutProps {
 
 export function AppLayout({ children, showNav = true }: AppLayoutProps) {
   return (
-    <div className="min-h-screen bg-background flex flex-col">
-      <main className={showNav ? "flex-1 safe-bottom" : "flex-1"}>
+    <div className="h-svh bg-background flex flex-col overflow-hidden">
+      <main className={cn("flex-1 relative overflow-hidden", showNav && "pb-[calc(var(--bottom-nav-height)+env(safe-area-inset-bottom,0px))]")}>
         {children}
       </main>
       {showNav && <BottomNav />}
