@@ -4,20 +4,34 @@ import { Button } from "@/components/ui/button";
 import Map from "@/components/Map";
 
 const MapPage = () => {
+  const [activeFilter, setActiveFilter] = useState<'all' | 'gas' | 'ev'>('all');
+
   return (
     <AppLayout>
       <div className="relative h-full w-full">
         {/* Map area */}
-        <Map />
+        <Map filter={activeFilter} />
 
         {/* Floating filter chips */}
         <div className="absolute top-4 left-4 right-4 flex gap-2 z-[400]">
-          <button className="glass px-4 py-2 rounded-full text-xs font-medium text-foreground flex items-center gap-1.5 hover:bg-surface-hover transition-colors">
-            <Fuel className="h-3.5 w-3.5 text-warning" />
+          <button 
+            onClick={() => setActiveFilter(activeFilter === 'gas' ? 'all' : 'gas')}
+            className={cn(
+              "glass px-4 py-2 rounded-full text-xs font-medium flex items-center gap-1.5 transition-all",
+              activeFilter === 'gas' ? "bg-warning text-warning-foreground border-warning" : "text-foreground hover:bg-surface-hover"
+            )}
+          >
+            <Fuel className={cn("h-3.5 w-3.5", activeFilter === 'gas' ? "text-warning-foreground" : "text-warning")} />
             Gas
           </button>
-          <button className="glass px-4 py-2 rounded-full text-xs font-medium text-foreground flex items-center gap-1.5 hover:bg-surface-hover transition-colors">
-            <Zap className="h-3.5 w-3.5 text-primary" />
+          <button 
+            onClick={() => setActiveFilter(activeFilter === 'ev' ? 'all' : 'ev')}
+            className={cn(
+              "glass px-4 py-2 rounded-full text-xs font-medium flex items-center gap-1.5 transition-all",
+              activeFilter === 'ev' ? "bg-primary text-primary-foreground border-primary" : "text-foreground hover:bg-surface-hover"
+            )}
+          >
+            <Zap className={cn("h-3.5 w-3.5", activeFilter === 'ev' ? "text-primary-foreground" : "text-primary")} />
             EV
           </button>
         </div>

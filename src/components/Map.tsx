@@ -63,8 +63,12 @@ const LocationMarker = () => {
   );
 };
 
-const Map = () => {
+const Map = ({ filter = 'all' }: { filter?: 'all' | 'gas' | 'ev' }) => {
   const { data: stations, isLoading } = useStations();
+
+  const filteredStations = stations?.filter(s => 
+    filter === 'all' || s.type === filter
+  );
 
   return (
     <MapContainer 
@@ -79,7 +83,7 @@ const Map = () => {
       />
       <LocationMarker />
 
-      {stations?.map((station) => (
+      {filteredStations?.map((station) => (
         <Marker 
           key={station.id} 
           position={[station.latitude, station.longitude]}
