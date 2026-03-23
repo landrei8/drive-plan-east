@@ -14,16 +14,253 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      ev_prices: {
+        Row: {
+          charge_type: string
+          currency: string
+          id: string
+          price_per_kwh: number
+          reported_at: string
+          station_id: string
+        }
+        Insert: {
+          charge_type: string
+          currency?: string
+          id?: string
+          price_per_kwh: number
+          reported_at?: string
+          station_id: string
+        }
+        Update: {
+          charge_type?: string
+          currency?: string
+          id?: string
+          price_per_kwh?: number
+          reported_at?: string
+          station_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ev_prices_station_id_fkey"
+            columns: ["station_id"]
+            isOneToOne: false
+            referencedRelation: "ev_stations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ev_stations: {
+        Row: {
+          address: string
+          approved_at: string | null
+          approved_by: string | null
+          connector_types: string[] | null
+          country: string
+          created_at: string
+          id: string
+          latitude: number
+          longitude: number
+          name: string
+          network: string | null
+          power_kw: number | null
+          status: string
+          submitted_by: string | null
+          updated_at: string
+        }
+        Insert: {
+          address: string
+          approved_at?: string | null
+          approved_by?: string | null
+          connector_types?: string[] | null
+          country: string
+          created_at?: string
+          id?: string
+          latitude: number
+          longitude: number
+          name: string
+          network?: string | null
+          power_kw?: number | null
+          status?: string
+          submitted_by?: string | null
+          updated_at?: string
+        }
+        Update: {
+          address?: string
+          approved_at?: string | null
+          approved_by?: string | null
+          connector_types?: string[] | null
+          country?: string
+          created_at?: string
+          id?: string
+          latitude?: number
+          longitude?: number
+          name?: string
+          network?: string | null
+          power_kw?: number | null
+          status?: string
+          submitted_by?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      favorite_stations: {
+        Row: {
+          created_at: string
+          id: string
+          station_id: string
+          station_type: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          station_id: string
+          station_type: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          station_id?: string
+          station_type?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      fuel_prices: {
+        Row: {
+          currency: string
+          fuel_type: string
+          id: string
+          price: number
+          reported_at: string
+          reported_by: string | null
+          station_id: string
+        }
+        Insert: {
+          currency?: string
+          fuel_type: string
+          id?: string
+          price: number
+          reported_at?: string
+          reported_by?: string | null
+          station_id: string
+        }
+        Update: {
+          currency?: string
+          fuel_type?: string
+          id?: string
+          price?: number
+          reported_at?: string
+          reported_by?: string | null
+          station_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fuel_prices_station_id_fkey"
+            columns: ["station_id"]
+            isOneToOne: false
+            referencedRelation: "gas_stations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      gas_stations: {
+        Row: {
+          address: string
+          brand: string | null
+          country: string
+          created_at: string
+          id: string
+          latitude: number
+          longitude: number
+          name: string
+          updated_at: string
+        }
+        Insert: {
+          address: string
+          brand?: string | null
+          country: string
+          created_at?: string
+          id?: string
+          latitude: number
+          longitude: number
+          name: string
+          updated_at?: string
+        }
+        Update: {
+          address?: string
+          brand?: string | null
+          country?: string
+          created_at?: string
+          id?: string
+          latitude?: number
+          longitude?: number
+          name?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          created_at: string
+          full_name: string | null
+          id: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string
+          full_name?: string | null
+          id?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string
+          full_name?: string | null
+          id?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "moderator" | "user"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +387,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "moderator", "user"],
+    },
   },
 } as const
