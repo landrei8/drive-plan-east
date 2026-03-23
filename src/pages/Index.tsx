@@ -1,7 +1,9 @@
+import { useState } from "react";
 import { AppLayout } from "@/components/AppLayout";
 import { Zap, Fuel, Navigation } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Map from "@/components/Map";
+import { cn } from "@/lib/utils";
 
 const MapPage = () => {
   const [activeFilter, setActiveFilter] = useState<'all' | 'gas' | 'ev'>('all');
